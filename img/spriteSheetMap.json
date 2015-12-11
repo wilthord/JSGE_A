@@ -27,5 +27,9 @@
 				{"name":"Numeros","x":255,"y":0,"w":16,"h":32 }
 			]
 		}
+	],
+"animaciones":[
+		{"name":"GuardiaQuieto","sprites":["Guardia","Monstruo","Pilar","Cristal","Escudo"]},
+		{"name":"GuardiaMovimiento","sprites":["Escudo","Pilar","Cristal","Monstruo","Guardia"]}
 	]
 }

@@ -80,6 +80,20 @@ function callbackJSONImagenes(respuestaText, callbackIniciar){
        spriteSheetsMap[obj.sheets[i].sheetName] = mySpriteSheet;        //Se guarda el objeto SpriteSheet en el mapa de SpriteSheets
     }
 
+    //Cargamos las animaciones
+    var animController = new AnimacionesController();
+    for(var i=0; i < obj.animaciones.length; i++) {
+        
+        var spritesAnim = [];
+
+        for( j=0; j<obj.animaciones[i].sprites.length; j++){     //Recorremos todos los sprites de la SpriteSheet
+
+            spritesAnim[j] = obj.animaciones[i].sprites[j];
+
+        }
+
+        animController.defAnimacion(obj.animaciones[i].name, spritesAnim);
+    }
     callbackIniciar();
 
 }
