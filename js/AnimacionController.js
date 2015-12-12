@@ -26,3 +26,13 @@ AnimacionesController.prototype.getAnimacion = function (nombreAnim) {
     return animacionesMap[nombreAnim];
 
 }
+
+AnimacionesController.prototype.getFrameSprite = function (nombreAnim, numFrame) {
+
+    var animacion = animacionesMap[nombreAnim];
+
+    var sprites = animacion.sprites;
+
+    return sprites[numFrame%sprites.numFrames];
+
+}
