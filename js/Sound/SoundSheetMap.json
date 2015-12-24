@@ -1,0 +1,5 @@
+{"sonidos":[
+		{"name":"jump","path":"js/Sound/jump.wav" },
+		{"name":"city","path":"js/Sound/city.wav" }
+	]
+}

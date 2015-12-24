@@ -129,6 +129,7 @@ GameEngineClass.prototype.init=function(){
 	this.canvasObj.height = this.canvasSize.h;
 	GE.ctx = this.canvasObj.getContext("2d");
 	loadSprites("img/spriteSheetMap.json", GE.cargarNiveles);
+	loadSoundSheet("js/Sound/SoundSheetMap.json", function(){});
 	// Se inicializa el PhysicsEngine
 	this.setup();
 }
