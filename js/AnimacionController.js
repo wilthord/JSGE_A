@@ -8,13 +8,14 @@ AnimacionesController = function(){
 
 AnimacionesController.prototype.constructor = AnimacionesController;
 
-AnimacionesController.prototype.defAnimacion = function (nombreAnim, spritesAnim) {
+AnimacionesController.prototype.defAnimacion = function (nombreAnim, spritesAnim, frameDuration) {
 
     var anim = new Animacion();
     
     anim.id=nombreAnim;
     anim.numFrames=spritesAnim.length;
     anim.sprites=spritesAnim;
+    anim.frameDuration=frameDuration;
 
     animacionesMap[nombreAnim]=anim;
 
@@ -27,6 +28,7 @@ AnimacionesController.prototype.getAnimacion = function (nombreAnim) {
 
 }
 
+/*
 AnimacionesController.prototype.getFrameSprite = function (nombreAnim, numFrame) {
 
     var animacion = animacionesMap[nombreAnim];
@@ -36,3 +38,20 @@ AnimacionesController.prototype.getFrameSprite = function (nombreAnim, numFrame)
     return sprites[numFrame%sprites.numFrames];
 
 }
+*/
+
+AnimacionesController.prototype.getFrameSprite = function (nombreAnim, deltaTime) {
+
+    var animacion = animacionesMap[nombreAnim];
+
+    var sprites = animacion.sprites;
+
+    var actualFrame = Math.floor((deltaTime / animacion.frameDuration)) % animacion.numFrames;
+
+    //console.log(actualFrame + ' = ' + deltaTime + ' / ' + animacion.frameDuration+ ' % ' +animacion.numFrames);
+
+    return sprites[actualFrame];
+
+}
+
+gAnimController = new AnimacionesController();

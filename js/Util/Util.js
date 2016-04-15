@@ -34,3 +34,6 @@ Object.defineProperty(Array.prototype, "removeObj", {
         return removeCounter;
     }
 });
+
+objDate = new Date();
+startTime = objDate.getTime();

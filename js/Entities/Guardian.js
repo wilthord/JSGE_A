@@ -1,6 +1,11 @@
 GuardianClass = function(guardianJson){
 	EntityClass.call(this);
 
+	this.estado = null;
+
+	//Tiempo inicial de la animación actual. este valor se cambia cada vez que se requiere cambiar la animacion (Cambio de estado)
+	this.animStartTime = objDate.getTime();    
+
 	//Acá se guarda la relación de las entidades con collision
 	this.contactos = [];
 
@@ -135,7 +140,12 @@ GuardianClass.prototype.update = function(){
 		this.physBody.SetLinearVelocity(new b2Vec2(this.dir.x * this.speed, this.dir.y * this.speed));
 	}
 	
-
+	var objDate = new Date();
+	/****  OBTENEMOS EL SIGUIENTE FRAME PARA LA ANIMACION ***/
+	var deltaTime = (objDate.getTime()-this.animStartTime);			//numero de milisegundos que pasaron desde la ultima actualizacion.
+	this.currSpriteName = gAnimController.getFrameSprite('GuardiaQuieto', deltaTime);
+	//console.log(this.animStartTime + ' -- ' + objDate.getTime());
+	//this.lastUpdated = objDate.getTime();
 }
 /*
 GuardianClass.prototype.draw = function(){

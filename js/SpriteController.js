@@ -81,7 +81,6 @@ function callbackJSONImagenes(respuestaText, callbackIniciar){
     }
 
     //Cargamos las animaciones
-    var animController = new AnimacionesController();
     for(var i=0; i < obj.animaciones.length; i++) {
         
         var spritesAnim = [];
@@ -92,7 +91,7 @@ function callbackJSONImagenes(respuestaText, callbackIniciar){
 
         }
 
-        animController.defAnimacion(obj.animaciones[i].name, spritesAnim);
+        gAnimController.defAnimacion(obj.animaciones[i].name, spritesAnim, obj.animaciones[i].frameDuration);
     }
     callbackIniciar();
 

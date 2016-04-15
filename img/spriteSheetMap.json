@@ -29,7 +29,7 @@
 		}
 	],
 "animaciones":[
-		{"name":"GuardiaQuieto","sprites":["Guardia","Monstruo","Pilar","Cristal","Escudo"]},
-		{"name":"GuardiaMovimiento","sprites":["Escudo","Pilar","Cristal","Monstruo","Guardia"]}
+		{"name":"GuardiaQuieto","frameDuration":500,"sprites":["Guardia","Monstruo","Pilar","Cristal","Escudo"]},
+		{"name":"GuardiaMovimiento","frameDuration":500,"sprites":["Escudo","Pilar","Cristal","Monstruo","Guardia"]}
 	]
 }
