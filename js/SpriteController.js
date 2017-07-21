@@ -142,7 +142,7 @@ function pintarSprite(nombreSprite, x, y){
         return;
     }
 
-    GE.ctx.drawImage(sheet.img, sprite.x, sprite.y, sprite.w, sprite.h, x, y, sprite.w, sprite.h);
+    GE.ctx.drawImage(sheet.img, sprite.x, sprite.y, sprite.w, sprite.h, x-GE.camaraOffset.x, y-GE.camaraOffset.y, sprite.w, sprite.h);
 }
 
 //Dibuja el Sprite con nombre "nombreSprite" en la posicion X, Y
@@ -170,7 +170,7 @@ function pintarSpriteCustom(nombreSprite, x, y, w, h, angulo){
     }
 
     GE.ctx.save();
-    GE.ctx.translate(x, y);
+    GE.ctx.translate( x-GE.camaraOffset.x, y-GE.camaraOffset.y);
     //GE.ctx.rotate((this.angulo*Math.PI)/180);
     GE.ctx.rotate(angulo);
     GE.ctx.drawImage(sheet.img, sprite.x, sprite.y, sprite.w, sprite.h, -sprite.w/(2*w), -sprite.h/(2*h), sprite.w/w, sprite.h/h);

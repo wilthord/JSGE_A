@@ -18,6 +18,8 @@ function callbackJSONNiveles(respuestaText, callbackIniciar){
 
         miNivel = new LevelClass(obj.Niveles[i].id, obj.Niveles[i].nombre);     //Creamos una nueva instancia de la SpriteSheet
 
+        miNivel.mapa = obj.Niveles[i].mapa;
+
         for( j=0; j<obj.Niveles[i].entidades.length; j++){     //Recorremos todas las entidades de los niveles
             miEntidad = obj.Niveles[i].entidades[j];
             miNivel.agregarEntidad(miEntidad);

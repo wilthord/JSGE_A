@@ -2,6 +2,8 @@ LevelClass = function(ident, nomLevel){
 	this.id = ident;
 	this.nombre = nomLevel;
 
+	this.mapa = null;
+
 	this.entidades = [];
 }
 

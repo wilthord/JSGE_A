@@ -1,50 +1,52 @@
 // Version de lector de mapas de tiled, adaptada del curso HTML5 Game Development, encontrado en Udacity
 
-var MapLoaderClass = Class.extend({
+MapLoaderClass = function(){
     // Mapa actual, Json parseado
-    currMapData: null,
+    this.currMapData = null;
 
     // Todos los tilesets que hacen parte del mapa actual
-    tilesets: [],
+    this.tilesets = [];
 
     // Valores por defecto, se cargan luego con el mapa
-    numXTiles: 100,
-    numYTiles: 100,
-    numTiles: {
+    this.numTiles = {
         "x": 100,
         "y": 100
-    },
+    };
 
     // Tamaño en pixeles de cada Tile
-    tileSize: {
+    this.tileSize= {
         "x": 64,
         "y": 64
-    },
+    };
 
     // Tamaño del mapa en pixeles. Es el producto de numTiles * tileSize calculado luego
-    pixelSize: {
+    this.pixelSize= {
         "x": 64,
         "y": 64
-    },
+    };
 
     // Numero de imagenes cargadas
-    imgLoadCount: 0,
+    this.imgLoadCount= 0;
 
     // Bandera para marcar si ya se cargó el mapa y todos los recursos (Imagenes, tilesets, ...)
-    fullyLoaded: false,
+    this.fullyLoaded= false;
+    
+}
 
+
+    MapLoaderClass.prototype.constructor = MapLoaderClass;
 	
     // Descargamos el Json del mapa
-    load: function (map) {
+    MapLoaderClass.prototype.load= function (map) {
 
         xhrGet(map, function (data) {
-            gMap.parseMapJSON(data.responseText);
+            gMap.parseMapJSON(data.currentTarget.responseText);
         });
-    },
+    }
 
     
     // Hacemos el parseo del mapa
-    parseMapJSON: function (mapJSON) {
+    MapLoaderClass.prototype.parseMapJSON= function (mapJSON) {
         gMap.currMapData = JSON.parse(mapJSON);
 
         var map = gMap.currMapData;
@@ -94,11 +96,11 @@ var MapLoaderClass = Class.extend({
             // Guardamos el tileset en el arreglo de tilesets cargados
             gMap.tilesets.push(ts);
         }
-    },
+    }
 
     //-----------------------------------------
     // Retorna un objeto con la imagen y la posición en pixeles, donde se encuentra el tile buscado
-    getTilePacket: function (tileIndex) {
+    MapLoaderClass.prototype.getTilePacket= function (tileIndex) {
 
         var pkt = {
             "img": null,
@@ -135,10 +137,10 @@ var MapLoaderClass = Class.extend({
 
 
         return pkt;
-    },
+    }
 
     // pintamos el mapa
-    draw: function (ctx) {
+    MapLoaderClass.prototype.draw= function (ctx) {
         // solo pintamos el mapa si todas las imagenes estan cargadas
         if(!gMap.fullyLoaded) return;
 
@@ -163,17 +165,17 @@ var MapLoaderClass = Class.extend({
                 // Calculamos la posicion en el mundo, en la cual debemos pintar el tile
                 var worldX = Math.floor(tileIDX % this.numTiles.x) * this.tileSize.x;
                 var worldY = Math.floor(tileIDX / this.numTiles.y) * this.tileSize.y;
+
+                
                 
                 //Pintamos el tile
                 ctx.drawImage(tPKT.img, tPKT.px, tPKT.py,
                                 this.tileSize.x, this.tileSize.y,
-                                worldX, worldY,
+                                worldX-GE.camaraOffset.x, worldY-GE.camaraOffset.y,
                                 this.tileSize.x, this.tileSize.y);
 
             }
         }
     }
 
-});
-
-var gMap = new TILEDMapClass();
+var gMap = new MapLoaderClass();

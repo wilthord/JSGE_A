@@ -13,7 +13,14 @@ GameEngineClass = function(){
 
 	this.canvasObj = {};
 
-	this.canvasSize = {w:500, h:500};
+	this.canvasSize = {h:500, w:700};
+
+	this.camaraSize = {h:500, w:700};
+
+	//la posición de la camara la ubicamos por defecto en el centro del mundo
+	this.camaraPos = {x:this.camaraSize.h/2, y:this.camaraSize.w/2};
+
+	this.camaraOffset = {"x":0, "y":0};
 
 	this.entities=[];
 
@@ -129,7 +136,10 @@ GameEngineClass.prototype.init=function(){
 	this.canvasObj.height = this.canvasSize.h;
 	GE.ctx = this.canvasObj.getContext("2d");
 	loadSprites("img/spriteSheetMap.json", GE.cargarNiveles);
-	loadSoundSheet("js/Sound/SoundSheetMap.json", function(){});
+	
+	// ** Comentado mientras se corrigen errores en el gestor de sonidos
+	//loadSoundSheet("js/Sound/SoundSheetMap.json", function(){});
+
 	// Se inicializa el PhysicsEngine
 	this.setup();
 }
@@ -153,6 +163,9 @@ GameEngineClass.prototype.nivelPerdido = function(){
 
 GameEngineClass.prototype.nuevoNivel = function(){
 	var nivelCargar = niveles[this.nivelActual];
+
+	//TODO: Validar que el nivel tenga definido un mapa
+	gMap.load(nivelCargar.mapa);
 
 	//Limpiamos todo lo del nivel anterior
 	for (var j = 0; j < this.entities.length; j++) {
@@ -181,6 +194,9 @@ GameEngineClass.prototype.nuevoNivel = function(){
 
 GameEngineClass.prototype.nuevoGUI = function(nombreGUI){
 	var nivelCargar = niveles[nombreGUI];
+
+	//TODO: Validar que el nivel tenga definido un mapa
+	gMap.load(nivelCargar.mapa);
 
 	//Limpiamos todo lo del nivel anterior
 	for (var j = 0; j < this.entities.length; j++) {
@@ -216,6 +232,14 @@ GameEngineClass.prototype.tick = function() {
 	}
 
 	GE.updateGame();
+	if(!this.isGUI){
+		// Crear metodo updateCamara y remplazar esto por dicho metodo
+		this.camaraPos = {"x":GE.personaje.pos.x, "y":GE.personaje.pos.y};
+		
+		this.camaraOffset = {"x":(GE.camaraPos.x-(GE.camaraSize.h/2)), "y":(GE.camaraPos.y-(GE.camaraSize.w/2))};
+	}else{
+		this.camaraOffset = {"x":0, "y":0};
+	}
 	GE.drawGame();
 
     //Finalizamos el monitoreo
@@ -246,12 +270,14 @@ GameEngineClass.prototype.updateGame=function(){
 }
 
 GameEngineClass.prototype.drawGame=function(){
-	var pisoSprite = findSprite(pisoSpriteName);
+	/*var pisoSprite = findSprite(pisoSpriteName);
 	for(var i=0;i<this.canvasSize.w; i+=pisoSprite.w){
 		for(var j=0;j<this.canvasSize.h; j+=pisoSprite.h){
 			pintarSprite(pisoSpriteName,i,j);
 		}
-	}
+	}*/
+
+	gMap.draw(GE.ctx);
 
 	GE.entities.forEach(function(entidad) {
 		entidad.draw();
