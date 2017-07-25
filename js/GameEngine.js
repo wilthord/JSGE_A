@@ -15,8 +15,9 @@ GameEngineClass = function(){
 
 	this.canvasSize = {h:500, w:700};
 
+	//TODO: definir la clase camara por separado	
 	this.camaraSize = {h:500, w:700};
-
+	
 	//la posición de la camara la ubicamos por defecto en el centro del mundo
 	this.camaraPos = {x:this.camaraSize.h/2, y:this.camaraSize.w/2};
 

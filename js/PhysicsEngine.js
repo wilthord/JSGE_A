@@ -1,4 +1,4 @@
-
+//TODO: Generar modo debug visible.
 // These are global shorthands we declare for Box2D primitives
 // we'll be using very frequently.
 Vec2 = b2Vec2;

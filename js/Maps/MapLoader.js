@@ -167,7 +167,7 @@ MapLoaderClass = function(){
                 var worldY = Math.floor(tileIDX / this.numTiles.y) * this.tileSize.y;
 
                 
-                
+                //TODO: Pintar los tiles del map usando los metodos del spriteController
                 //Pintamos el tile
                 ctx.drawImage(tPKT.img, tPKT.px, tPKT.py,
                                 this.tileSize.x, this.tileSize.y,
