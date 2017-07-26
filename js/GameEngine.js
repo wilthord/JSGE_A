@@ -1,52 +1,46 @@
 /** Codigo para presentar estadisticas de rendimiento en tiempo real **/
 var stats = new Stats();
-stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
+stats.setMode(0); // 0: fps, 1: ms, 2: mb
 
 pisoSpriteName = "Piso";
 
 document.getElementById("divStats").appendChild(stats.domElement);
 /** Fin del codigo de estadisticas **/
 
-GameEngineClass = function(){
+GameEngineClass = function() {
 
-	this.ctx = {};
+    this.ctx = {};
 
-	this.canvasObj = {};
+    this.canvasObj = {};
 
-	this.canvasSize = {h:500, w:700};
+    this.canvasSize = { h: 500, w: 700 };
 
-	//TODO: definir la clase camara por separado	
-	this.camaraSize = {h:500, w:700};
-	
-	//la posición de la camara la ubicamos por defecto en el centro del mundo
-	this.camaraPos = {x:this.camaraSize.h/2, y:this.camaraSize.w/2};
+    this.camara = new CamaraClass(this.canvasSize);
 
-	this.camaraOffset = {"x":0, "y":0};
+    this.entities = [];
 
-	this.entities=[];
+    this.pilaresActivos = 0;
 
-	this.pilaresActivos = 0;
+    this.cristalesActivos = 0;
 
-	this.cristalesActivos = 0;
+    this.personaje = {};
 
-	this.personaje={};
+    this.marcaMouse = {};
 
-	this.marcaMouse={};
+    this.nombreCanvas = 'myCanvas';
 
-	this.nombreCanvas='myCanvas';
+    this.enemySpawnTime = 600;
 
-	this.enemySpawnTime = 600;
+    this.nextEnemySpawn = 0;
 
-	this.nextEnemySpawn = 0;
+    this.nivelActual = 1;
 
-	this.nivelActual = 1;
+    this.entidadesFactory = [];
 
-	this.entidadesFactory = [];
-
-	this.isGUI = true;
+    this.isGUI = true;
 }
 
-GameEngineClass.prototype.setup = function () {
+GameEngineClass.prototype.setup = function() {
 
     // Create physics engine
     gPhysicsEngine.create();
@@ -54,7 +48,7 @@ GameEngineClass.prototype.setup = function () {
     // Add contact listener
     gPhysicsEngine.addContactListener({
 
-        BeginContact: function (bodyA, bodyB) {
+        BeginContact: function(bodyA, bodyB) {
             var uA = bodyA ? bodyA.GetUserData() : null;
             var uB = bodyB ? bodyB.GetUserData() : null;
 
@@ -92,211 +86,208 @@ GameEngineClass.prototype.setup = function () {
 }
 
 GameEngineClass.prototype.constructor = GameEngineClass;
-	// Metodo invocado cuando se terminan de cargar los sprites
-GameEngineClass.prototype.callbackIniciar = function(){
-	if(GE.isGUI){
-		GE.nuevoGUI("InicioGUI");
-	}else{
-		GE.nuevoNivel();
-	}	
-	/** Inicio de la sección para preparar un gameLoop eficiente **/
-	var animFrame = window.requestAnimationFrame ||
+// Metodo invocado cuando se terminan de cargar los sprites
+GameEngineClass.prototype.callbackIniciar = function() {
+    if (GE.isGUI) {
+        GE.nuevoGUI("InicioGUI");
+    } else {
+        GE.nuevoNivel();
+    }
+    /** Inicio de la sección para preparar un gameLoop eficiente **/
+    var animFrame = window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame    ||
-        window.oRequestAnimationFrame      ||
-        window.msRequestAnimationFrame     ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
         null;
 
-    if ( animFrame !== null ) {
+    if (animFrame !== null) {
 
-    	// Metodo recursivo controlado por el navegador, para hacer invocaciones de animaciones eficientemente
+        // Metodo recursivo controlado por el navegador, para hacer invocaciones de animaciones eficientemente
         var recursiveLoop = function() {
             //Tick del gameLoop
             GE.tick();
             //Se invoca el siguiente Tick del gameLoop, utilizando requestAnimationFrame o el disponible
-            animFrame( recursiveLoop );
+            animFrame(recursiveLoop);
         };
 
         // Iniciamos el Game Loop
-        animFrame( recursiveLoop );
+        animFrame(recursiveLoop);
     } else {
-    	// Si no está disponible ninguna versión del requestAnimationFrame, se inicia el gameloop con setInterval
-        var ONE_FRAME_TIME = 1000.0 / 60.0 ;
-        setInterval( GE.tick, ONE_FRAME_TIME );
+        // Si no está disponible ninguna versión del requestAnimationFrame, se inicia el gameloop con setInterval
+        var ONE_FRAME_TIME = 1000.0 / 60.0;
+        setInterval(GE.tick, ONE_FRAME_TIME);
     }
 
     gInputEngine.setup();
 
     /** Fin de preparación del gameLoop **/
-	
+
 }
 
-GameEngineClass.prototype.init=function(){
-	this.canvasObj = document.getElementById("myCanvas");
-	this.canvasObj.width = this.canvasSize.w;
-	this.canvasObj.height = this.canvasSize.h;
-	GE.ctx = this.canvasObj.getContext("2d");
-	loadSprites("img/spriteSheetMap.json", GE.cargarNiveles);
-	
-	// ** Comentado mientras se corrigen errores en el gestor de sonidos
-	//loadSoundSheet("js/Sound/SoundSheetMap.json", function(){});
+GameEngineClass.prototype.init = function() {
+    this.canvasObj = document.getElementById("myCanvas");
+    this.canvasObj.width = this.canvasSize.w;
+    this.canvasObj.height = this.canvasSize.h;
+    GE.ctx = this.canvasObj.getContext("2d");
+    loadSprites("img/spriteSheetMap.json", GE.cargarNiveles);
 
-	// Se inicializa el PhysicsEngine
-	this.setup();
+    // ** Comentado mientras se corrigen errores en el gestor de sonidos
+    //loadSoundSheet("js/Sound/SoundSheetMap.json", function(){});
+
+    // Se inicializa el PhysicsEngine
+    this.setup();
 }
 
-GameEngineClass.prototype.cargarNiveles = function(){
-	cargarNivelesJSON("js/Levels/Niveles.json",GE.callbackIniciar);
+GameEngineClass.prototype.cargarNiveles = function() {
+    cargarNivelesJSON("js/Levels/Niveles.json", GE.callbackIniciar);
 }
 
-GameEngineClass.prototype.nivelSuperado = function(){
-	//alert("Level Cleared");
-	this.nivelActual++;
-	this.nuevoGUI("SuperadoGUI");
-	this.isGUI=true;
+GameEngineClass.prototype.nivelSuperado = function() {
+    //alert("Level Cleared");
+    this.nivelActual++;
+    this.nuevoGUI("SuperadoGUI");
+    this.isGUI = true;
 }
 
-GameEngineClass.prototype.nivelPerdido = function(){
-	//alert("GameOver try again...");
-	this.nuevoGUI("PerdisteGUI");
-	this.isGUI=true;
+GameEngineClass.prototype.nivelPerdido = function() {
+    //alert("GameOver try again...");
+    this.nuevoGUI("PerdisteGUI");
+    this.isGUI = true;
 }
 
-GameEngineClass.prototype.nuevoNivel = function(){
-	var nivelCargar = niveles[this.nivelActual];
+GameEngineClass.prototype.nuevoNivel = function() {
+    var nivelCargar = niveles[this.nivelActual];
 
-	//TODO: Validar que el nivel tenga definido un mapa
-	gMap.load(nivelCargar.mapa);
+    //TODO: Validar que el nivel tenga definido un mapa
+    gMap.load(nivelCargar.mapa);
 
-	//Limpiamos todo lo del nivel anterior
-	for (var j = 0; j < this.entities.length; j++) {
-		if(this.entities[j].physBody) gPhysicsEngine.removeBody(this.entities[j].physBody);
+    //Limpiamos todo lo del nivel anterior
+    for (var j = 0; j < this.entities.length; j++) {
+        if (this.entities[j].physBody) gPhysicsEngine.removeBody(this.entities[j].physBody);
         this.entities.removeObj(this.entities[j]);
     }
 
-	this.entities = [];
-	this.pilaresActivos=0;
-	this.cristalesActivos=0;
-	this.personaje = {};
+    this.entities = [];
+    this.pilaresActivos = 0;
+    this.cristalesActivos = 0;
+    this.personaje = {};
 
-	for(var i=0; i<nivelCargar.entidades.length; i++){
-		var entidadNueva = new this.entidadesFactory[nivelCargar.entidades[i].type](nivelCargar.entidades[i]);
-		if(entidadNueva instanceof PilarClass){
-			this.pilaresActivos++;
-		}else if (entidadNueva instanceof CristalClass) {
-			this.cristalesActivos++;
-		}else if (entidadNueva instanceof PlayerClass) {
-			this.personaje = entidadNueva;
-		}
-		this.entities.push(entidadNueva);
-	}
+    for (var i = 0; i < nivelCargar.entidades.length; i++) {
+        var entidadNueva = new this.entidadesFactory[nivelCargar.entidades[i].type](nivelCargar.entidades[i]);
+        if (entidadNueva instanceof PilarClass) {
+            this.pilaresActivos++;
+        } else if (entidadNueva instanceof CristalClass) {
+            this.cristalesActivos++;
+        } else if (entidadNueva instanceof PlayerClass) {
+            this.personaje = entidadNueva;
+            //Le indicamos a la camara que siga al personaje
+            this.camara.seguir(this.personaje);
+        }
+        this.entities.push(entidadNueva);
+    }
 
 }
 
-GameEngineClass.prototype.nuevoGUI = function(nombreGUI){
-	var nivelCargar = niveles[nombreGUI];
+GameEngineClass.prototype.nuevoGUI = function(nombreGUI) {
+    var nivelCargar = niveles[nombreGUI];
 
-	//TODO: Validar que el nivel tenga definido un mapa
-	gMap.load(nivelCargar.mapa);
+    this.camara.noSeguir({ x: this.camara.size.h / 2, y: this.camara.size.y / 2 });
 
-	//Limpiamos todo lo del nivel anterior
-	for (var j = 0; j < this.entities.length; j++) {
-		if(this.entities[j].physBody) gPhysicsEngine.removeBody(this.entities[j].physBody);
+    //TODO: Validar que el nivel tenga definido un mapa
+    gMap.load(nivelCargar.mapa);
+
+    //Limpiamos todo lo del nivel anterior
+    for (var j = 0; j < this.entities.length; j++) {
+        if (this.entities[j].physBody) gPhysicsEngine.removeBody(this.entities[j].physBody);
         this.entities.removeObj(this.entities[j]);
     }
 
-	this.entities = [];
-	this.pilaresActivos=0;
-	this.cristalesActivos=0;
-	this.personaje = {};
+    this.entities = [];
+    this.pilaresActivos = 0;
+    this.cristalesActivos = 0;
+    this.personaje = {};
 
-	for(var i=0; i<nivelCargar.entidades.length; i++){
-		var entidadNueva = new GUIEntityClass(nivelCargar.entidades[i]);
-		this.entities.push(entidadNueva);
-	}
+    for (var i = 0; i < nivelCargar.entidades.length; i++) {
+        var entidadNueva = new GUIEntityClass(nivelCargar.entidades[i]);
+        this.entities.push(entidadNueva);
+    }
 
 }
 
 GameEngineClass.prototype.tick = function() {
 
-	// Iniciamos el monitoreo
-	stats.begin();
+    // Iniciamos el monitoreo
+    stats.begin();
 
-	if(!this.isGUI){
-		if(this.cristalesActivos<1){
-			this.nivelSuperado();	
-		}else if(this.personaje && this.personaje!=null && this.personaje instanceof PlayerClass && this.personaje.isDead==false){
+    if (!this.isGUI) {
+        if (this.cristalesActivos < 1) {
+            this.nivelSuperado();
+        } else if (this.personaje && this.personaje != null && this.personaje instanceof PlayerClass && this.personaje.isDead == false) {
 
-		}else{
-			this.nivelPerdido();
-		}
-	}
+        } else {
+            this.nivelPerdido();
+        }
+    }
 
-	GE.updateGame();
-	if(!this.isGUI){
-		// Crear metodo updateCamara y remplazar esto por dicho metodo
-		this.camaraPos = {"x":GE.personaje.pos.x, "y":GE.personaje.pos.y};
-		
-		this.camaraOffset = {"x":(GE.camaraPos.x-(GE.camaraSize.h/2)), "y":(GE.camaraPos.y-(GE.camaraSize.w/2))};
-	}else{
-		this.camaraOffset = {"x":0, "y":0};
-	}
-	GE.drawGame();
+    GE.updateGame();
+    GE.camara.update();
+    GE.drawGame();
 
     //Finalizamos el monitoreo
     stats.end();
 }
 
-GameEngineClass.prototype.updateGame=function(){
+GameEngineClass.prototype.updateGame = function() {
 
 
-	var entidadesEliminar = [];
-	GE.entities.forEach(function(entidad) {
-		if(entidad.isDead==true){
-			entidadesEliminar.push(entidad);
-		}else{
-			entidad.update();
-		}
-	});
-	
-	for (var j = 0; j < entidadesEliminar.length; j++) {
-		if(entidadesEliminar[j].physBody) gPhysicsEngine.removeBody(entidadesEliminar[j].physBody);
+    var entidadesEliminar = [];
+    GE.entities.forEach(function(entidad) {
+        if (entidad.isDead == true) {
+            entidadesEliminar.push(entidad);
+        } else {
+            entidad.update();
+        }
+    });
+
+    for (var j = 0; j < entidadesEliminar.length; j++) {
+        if (entidadesEliminar[j].physBody) gPhysicsEngine.removeBody(entidadesEliminar[j].physBody);
         this.entities.removeObj(entidadesEliminar[j]);
     }
 
-	gPhysicsEngine.update();
+    gPhysicsEngine.update();
 
-	//Validamos si es momento de generar un nuevo enemigo
-	//if(this.nextEnemySpawn===0) this.spawnEnemy();
+    //Validamos si es momento de generar un nuevo enemigo
+    //if(this.nextEnemySpawn===0) this.spawnEnemy();
 }
 
-GameEngineClass.prototype.drawGame=function(){
-	/*var pisoSprite = findSprite(pisoSpriteName);
-	for(var i=0;i<this.canvasSize.w; i+=pisoSprite.w){
-		for(var j=0;j<this.canvasSize.h; j+=pisoSprite.h){
-			pintarSprite(pisoSpriteName,i,j);
-		}
-	}*/
+GameEngineClass.prototype.drawGame = function() {
+    /*var pisoSprite = findSprite(pisoSpriteName);
+    for(var i=0;i<this.canvasSize.w; i+=pisoSprite.w){
+    	for(var j=0;j<this.canvasSize.h; j+=pisoSprite.h){
+    		pintarSprite(pisoSpriteName,i,j);
+    	}
+    }*/
 
-	gMap.draw(GE.ctx);
+    gMap.draw(GE.ctx);
 
-	GE.entities.forEach(function(entidad) {
-		entidad.draw();
-	});
+    GE.entities.forEach(function(entidad) {
+        entidad.draw();
+    });
 }
 
-GameEngineClass.prototype.spawnEnemy = function(){
-	var nuevoEnemigo = new EnemyClass({x:0, y:0});
-	this.nextEnemySpawn=this.enemySpawnTime;
-	this.entities.push(nuevoEnemigo);
+GameEngineClass.prototype.spawnEnemy = function() {
+    var nuevoEnemigo = new EnemyClass({ x: 0, y: 0 });
+    this.nextEnemySpawn = this.enemySpawnTime;
+    this.entities.push(nuevoEnemigo);
 }
 
 
 GE = new GameEngineClass();
-GE.entidadesFactory["GuardianClass"]=GuardianClass;
-GE.entidadesFactory["PlayerClass"]=PlayerClass;
-GE.entidadesFactory["PilarClass"]=PilarClass;
-GE.entidadesFactory["CristalClass"]=CristalClass;
+GE.entidadesFactory["GuardianClass"] = GuardianClass;
+GE.entidadesFactory["PlayerClass"] = PlayerClass;
+GE.entidadesFactory["PilarClass"] = PilarClass;
+GE.entidadesFactory["CristalClass"] = CristalClass;
 
 GE.init();
 
