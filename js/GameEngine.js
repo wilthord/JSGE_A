@@ -13,7 +13,7 @@ GameEngineClass = function() {
 
     this.canvasObj = {};
 
-    this.canvasSize = { h: 500, w: 700 };
+    this.canvasSize = { h: 600, w: 800 };
 
     this.camara = new CamaraClass(this.canvasSize);
 
@@ -274,6 +274,10 @@ GameEngineClass.prototype.drawGame = function() {
     GE.entities.forEach(function(entidad) {
         entidad.draw();
     });
+
+    if (this.camara.debug) {
+        this.camara.drawDebugCamara();
+    }
 }
 
 GameEngineClass.prototype.spawnEnemy = function() {
