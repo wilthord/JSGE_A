@@ -159,8 +159,12 @@ GameEngineClass.prototype.nivelPerdido = function() {
 GameEngineClass.prototype.nuevoNivel = function() {
     var nivelCargar = niveles[this.nivelActual];
 
-    //TODO: Validar que el nivel tenga definido un mapa
-    gMap.load(nivelCargar.mapa);
+    if (nivelCargar.mapa) {
+        gMap.load(nivelCargar.mapa);
+    } else {
+        alert("Map not found for this level/stage !!!");
+        //VALIDAR: ¿generar fondo automaticamente?
+    }
 
     //Limpiamos todo lo del nivel anterior
     for (var j = 0; j < this.entities.length; j++) {
@@ -194,8 +198,12 @@ GameEngineClass.prototype.nuevoGUI = function(nombreGUI) {
 
     this.camara.noSeguir({ x: this.camara.size.h / 2, y: this.camara.size.y / 2 });
 
-    //TODO: Validar que el nivel tenga definido un mapa
-    gMap.load(nivelCargar.mapa);
+    if (nivelCargar.mapa) {
+        gMap.load(nivelCargar.mapa);
+    } else {
+        alert("Map not found for this level/stage !!!");
+        //VALIDAR: ¿generar fondo automaticamente?
+    }
 
     //Limpiamos todo lo del nivel anterior
     for (var j = 0; j < this.entities.length; j++) {
@@ -268,6 +276,9 @@ GameEngineClass.prototype.drawGame = function() {
     		pintarSprite(pisoSpriteName,i,j);
     	}
     }*/
+
+    //Limpiamos el canvas
+    this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h);
 
     gMap.draw(GE.ctx);
 

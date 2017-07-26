@@ -167,7 +167,7 @@ MapLoaderClass.prototype.draw = function(ctx) {
             var worldY = Math.floor(tileIDX / this.numTiles.y) * this.tileSize.y;
 
 
-            //TODO: Pintar los tiles del map usando los metodos del spriteController
+            //TODO: solo pintar el sprite si se encuentra dentro del recuadro visible por la camara
             //Pintamos el tile
             ctx.drawImage(tPKT.img, tPKT.px, tPKT.py,
                 this.tileSize.x, this.tileSize.y,
