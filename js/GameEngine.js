@@ -38,6 +38,8 @@ GameEngineClass = function() {
     this.entidadesFactory = [];
 
     this.isGUI = true;
+
+    this.mapaActual = null;
 }
 
 GameEngineClass.prototype.setup = function() {
@@ -169,16 +171,23 @@ GameEngineClass.prototype.nuevoNivel = function() {
     this.pilaresActivos = 0;
     this.cristalesActivos = 0;
     this.personaje = {};
-    
+
     if (nivelCargar.mapa) {
-        gMap.load(nivelCargar.mapa);
+        this.mapaActual = gMap.listaMapas[nivelCargar.mapa];
     } else {
         alert("Map not found for this level/stage !!!");
         //VALIDAR: ¿generar fondo automaticamente?
     }
 
+    //Instanciamos los objetos cargados por el mapa
+    for (var j = 0; j < this.mapaActual.objetos.length; j++) {
+        var objetoMapa = new GE.entidadesFactory[this.mapaActual.objetos[j].type](this.mapaActual.objetos[j]);
+        this.entities.push(objetoMapa);
+    }
+
     for (var i = 0; i < nivelCargar.entidades.length; i++) {
-        var entidadNueva = new this.entidadesFactory[nivelCargar.entidades[i].type](nivelCargar.entidades[i]);
+
+        var entidadNueva = new GE.entidadesFactory[nivelCargar.entidades[i].type](nivelCargar.entidades[i]);
         if (entidadNueva instanceof PilarClass) {
             this.pilaresActivos++;
         } else if (entidadNueva instanceof CristalClass) {
@@ -199,7 +208,8 @@ GameEngineClass.prototype.nuevoGUI = function(nombreGUI) {
     this.camara.noSeguir({ x: this.camara.size.h / 2, y: this.camara.size.y / 2 });
 
     if (nivelCargar.mapa) {
-        gMap.load(nivelCargar.mapa);
+        //TODO: Corregir, la lista de mapas llega vacia a este punto.
+        this.mapaActual = gMap.listaMapas[nivelCargar.mapa];
     } else {
         alert("Map not found for this level/stage !!!");
         //VALIDAR: ¿generar fondo automaticamente?
@@ -280,7 +290,9 @@ GameEngineClass.prototype.drawGame = function() {
     //Limpiamos el canvas
     this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h);
 
-    gMap.draw(GE.ctx);
+    if (this.mapaActual) {
+        this.mapaActual.draw(GE.ctx);
+    }
 
     GE.entities.forEach(function(entidad) {
         entidad.draw();
@@ -303,6 +315,7 @@ GE.entidadesFactory["GuardianClass"] = GuardianClass;
 GE.entidadesFactory["PlayerClass"] = PlayerClass;
 GE.entidadesFactory["PilarClass"] = PilarClass;
 GE.entidadesFactory["CristalClass"] = CristalClass;
+GE.entidadesFactory["PisoClass"] = PisoClass;
 
 GE.init();
 

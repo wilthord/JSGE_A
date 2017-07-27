@@ -25,6 +25,15 @@ PhysicsEngineClass.prototype.create = function() {
         new Vec2(0, 80), // Gravity vector
         false // Don't allow sleep
     );
+
+    /*
+        var debugDraw = new b2DebugDraw();
+        debugDraw.SetSprite(GE.ctx);
+        debugDraw.SetDrawScale(1.0);
+        debugDraw.SetFillAlpha(0);
+        debugDraw.SetLineThickness(5.0);
+        debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+        this.world.SetDebugDraw(debugDraw);*/
 }
 
 //-----------------------------------------

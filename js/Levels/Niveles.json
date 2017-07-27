@@ -2,7 +2,7 @@
     "Niveles": [{
             "id": "InicioGUI",
             "nombre": "InicioGUI",
-            "mapa": "js/Maps/pruebas.json",
+            "mapa": "js/Maps/sewers.json",
             "entidades": [
                 { "type": "GUIEntityClass", "xIni": 255, "yIni": 300, "sizeX": 124, "sizeY": 31, "GUIAction": "iniciarNivel", "spriteName": "Iniciar" },
                 { "type": "GUIEntityClass", "xIni": 255, "yIni": 100, "sizeX": 255, "sizeY": 160, "GUIAction": "", "spriteName": "NombreJuego" },
