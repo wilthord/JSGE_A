@@ -159,13 +159,6 @@ GameEngineClass.prototype.nivelPerdido = function() {
 GameEngineClass.prototype.nuevoNivel = function() {
     var nivelCargar = niveles[this.nivelActual];
 
-    if (nivelCargar.mapa) {
-        gMap.load(nivelCargar.mapa);
-    } else {
-        alert("Map not found for this level/stage !!!");
-        //VALIDAR: ¿generar fondo automaticamente?
-    }
-
     //Limpiamos todo lo del nivel anterior
     for (var j = 0; j < this.entities.length; j++) {
         if (this.entities[j].physBody) gPhysicsEngine.removeBody(this.entities[j].physBody);
@@ -176,6 +169,13 @@ GameEngineClass.prototype.nuevoNivel = function() {
     this.pilaresActivos = 0;
     this.cristalesActivos = 0;
     this.personaje = {};
+    
+    if (nivelCargar.mapa) {
+        gMap.load(nivelCargar.mapa);
+    } else {
+        alert("Map not found for this level/stage !!!");
+        //VALIDAR: ¿generar fondo automaticamente?
+    }
 
     for (var i = 0; i < nivelCargar.entidades.length; i++) {
         var entidadNueva = new this.entidadesFactory[nivelCargar.entidades[i].type](nivelCargar.entidades[i]);

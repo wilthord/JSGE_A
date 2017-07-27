@@ -23,9 +23,6 @@ CamaraClass = function(camSize, target) {
     //Actualmente no soporta valores inferiores a 0. 
     this.limite = { "x": 2000, "y": 1100 };
 
-    // TODO: Velocidad de la camara para seguir al objetivo
-    this.velocidad = { "x": 500, "y": 500 };
-
     //Parametro que indica si se deben pintar los margenes de la camara
     this.debug = false;
 

@@ -123,11 +123,11 @@ function pintarSprite(nombreSprite, x, y) {
     var sprite = {};
     var sheet = {};
 
-    if (x - GE.camara.offset.x < 50 || x - GE.camara.offset.x > GE.canvasSize.w) {
+    if (x - GE.camara.offset.x < -64 || x - GE.camara.offset.x > GE.canvasSize.w) {
         return;
     }
 
-    if (y - GE.camara.offset.y < 0 || y - GE.camara.offset.y > GE.canvasSize.h) {
+    if (y - GE.camara.offset.y < -64 || y - GE.camara.offset.y > GE.canvasSize.h) {
         return;
     }
 

@@ -96,6 +96,23 @@ MapLoaderClass.prototype.parseMapJSON = function(mapJSON) {
         // Guardamos el tileset en el arreglo de tilesets cargados
         gMap.tilesets.push(ts);
     }
+
+    for (var layerIdx = 0; layerIdx < map.layers.length; layerIdx++) {
+
+        //Solo recorremos las capas de objetos
+        if(map.layers[layerIdx].type!="objectgroup"){
+            continue;
+        }
+
+        for(var j = 0; j<map.layers[layerIdx].objects.length; j++){
+            if(map.layers[layerIdx].objects[j].type == "PisoObj"){
+                GE.entities.push(new PisoClass(map.layers[layerIdx].objects[j]));
+            }
+        }
+
+    }
+
+
 }
 
 //-----------------------------------------
@@ -166,8 +183,14 @@ MapLoaderClass.prototype.draw = function(ctx) {
             var worldX = Math.floor(tileIDX % this.numTiles.x) * this.tileSize.x;
             var worldY = Math.floor(tileIDX / this.numTiles.y) * this.tileSize.y;
 
+            if (worldX - GE.camara.offset.x < -64 || worldX - GE.camara.offset.x > GE.canvasSize.w) {
+                continue;
+            }
 
-            //TODO: solo pintar el sprite si se encuentra dentro del recuadro visible por la camara
+            if (worldY - GE.camara.offset.y < -64 || worldY - GE.camara.offset.y > GE.canvasSize.h) {
+                continue;
+            }
+
             //Pintamos el tile
             ctx.drawImage(tPKT.img, tPKT.px, tPKT.py,
                 this.tileSize.x, this.tileSize.y,

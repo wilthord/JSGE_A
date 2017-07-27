@@ -22,7 +22,7 @@ PhysicsEngineClass.prototype.constructor = PhysicsEngineClass;
 
 PhysicsEngineClass.prototype.create = function() {
     this.world = new World(
-        new Vec2(0, 0), // Gravity vector
+        new Vec2(0, 80), // Gravity vector
         false // Don't allow sleep
     );
 }

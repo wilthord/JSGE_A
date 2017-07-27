@@ -2,7 +2,7 @@
     "Niveles": [{
             "id": "InicioGUI",
             "nombre": "InicioGUI",
-            "mapa": "js/Maps/sewers.json",
+            "mapa": "js/Maps/pruebas.json",
             "entidades": [
                 { "type": "GUIEntityClass", "xIni": 255, "yIni": 300, "sizeX": 124, "sizeY": 31, "GUIAction": "iniciarNivel", "spriteName": "Iniciar" },
                 { "type": "GUIEntityClass", "xIni": 255, "yIni": 100, "sizeX": 255, "sizeY": 160, "GUIAction": "", "spriteName": "NombreJuego" },
@@ -33,7 +33,7 @@
         {
             "id": 1,
             "nombre": "Inicio",
-            "mapa": "js/Maps/sewers.json",
+            "mapa": "js/Maps/pruebas.json",
             "entidades": [
                 { "type": "PlayerClass", "xIni": 300, "yIni": 300 },
                 { "type": "GuardianClass", "xIni": 200, "yIni": 100, "xDest": 300, "yDest": 100, "velocidad": 100 },
