@@ -136,7 +136,7 @@ GameEngineClass.prototype.init = function() {
     loadSprites("img/spriteSheetMap.json", GE.cargarNiveles);
 
     // ** Comentado mientras se corrigen errores en el gestor de sonidos
-    //loadSoundSheet("js/Sound/SoundSheetMap.json", function(){});
+    loadSoundSheet("js/Sound/SoundSheetMap.json", function() {});
 
     // Se inicializa el PhysicsEngine
     this.setup();
