@@ -5,6 +5,8 @@ MapLoaderClass = function() {
     //Lista de mapas cargados
     this.listaMapas = {};
 
+    this.mapasPorCargar =0;
+
 }
 
 
@@ -94,6 +96,8 @@ MapLoaderClass.prototype.parseMapJSON = function(mapJSON, nombreMapa) {
     }
 
     this.listaMapas[nombreMapa] = nuevoMapa;
+
+    this.mapasPorCargar--;
 
 }
 

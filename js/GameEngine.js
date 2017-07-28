@@ -92,6 +92,7 @@ GameEngineClass.prototype.constructor = GameEngineClass;
 GameEngineClass.prototype.callbackIniciar = function() {
     if (GE.isGUI) {
         GE.nuevoGUI("InicioGUI");
+        //GE.nuevoNivel();
     } else {
         GE.nuevoNivel();
     }

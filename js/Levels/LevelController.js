@@ -6,7 +6,11 @@ function cargarNivelesJSON(nivelesURL, callbackIniciar) {
     });
 }
 
-function callbackJSONNiveles(respuestaText, callbackIniciar) {
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function callbackJSONNiveles(respuestaText, callbackIniciar) {
 
     var obj = JSON.parse(respuestaText);
 
@@ -20,6 +24,7 @@ function callbackJSONNiveles(respuestaText, callbackIniciar) {
         miNivel.mapa = obj.Niveles[i].mapa;
 
         if (miNivel.mapa) {
+            gMap.mapasPorCargar++;
             gMap.load(miNivel.mapa);
         }
 
@@ -31,6 +36,15 @@ function callbackJSONNiveles(respuestaText, callbackIniciar) {
         niveles[miNivel.id] = miNivel; //Se guarda el objeto Level en el mapa de Niveles
     }
 
-    callbackIniciar();
+    var tiempo = 0;
+    while(gMap.mapasPorCargar>0){
+        await sleep(2000);
+        tiempo+=2000;
+        if(tiempo>8000){
+            break;
+        }
+        // Esperamos maximo 10 segundos
+    }
 
+    callbackIniciar();
 }
