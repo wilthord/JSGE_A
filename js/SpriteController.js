@@ -123,7 +123,14 @@ function pintarSprite(nombreSprite, x, y) {
     var sprite = {};
     var sheet = {};
 
-    //TODO: solo pintar el sprite si se encuentra dentro del recuadro visible por la camara
+    if (x - GE.camara.offset.x < -64 || x - GE.camara.offset.x > GE.canvasSize.w) {
+        return;
+    }
+
+    if (y - GE.camara.offset.y < -64 || y - GE.camara.offset.y > GE.canvasSize.h) {
+        return;
+    }
+
     for (var sheetName in spriteSheetsMap) {
 
         sheet = spriteSheetsMap[sheetName]; //Consultamos SpriteSheet por SpriteSheet
@@ -151,7 +158,14 @@ function pintarSpriteCustom(nombreSprite, x, y, w, h, angulo) {
     var sprite = {};
     var sheet = {};
 
-    //TODO: solo pintar el sprite si se encuentra dentro del recuadro visible por la camara
+    if (x - GE.camara.offset.x < 0 - 64 || x - GE.camara.offset.x > GE.canvasSize.w + 64) {
+        return;
+    }
+
+    if (y - GE.camara.offset.y < 0 - 64 || y - GE.camara.offset.y > GE.canvasSize.h + 64) {
+        return;
+    }
+
     for (var sheetName in spriteSheetsMap) {
 
         sheet = spriteSheetsMap[sheetName]; //Consultamos SpriteSheet por SpriteSheet

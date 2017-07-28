@@ -13,7 +13,7 @@ GameEngineClass = function() {
 
     this.canvasObj = {};
 
-    this.canvasSize = { h: 500, w: 700 };
+    this.canvasSize = { h: 600, w: 800 };
 
     this.camara = new CamaraClass(this.canvasSize);
 
@@ -38,6 +38,8 @@ GameEngineClass = function() {
     this.entidadesFactory = [];
 
     this.isGUI = true;
+
+    this.mapaActual = null;
 }
 
 GameEngineClass.prototype.setup = function() {
@@ -90,6 +92,7 @@ GameEngineClass.prototype.constructor = GameEngineClass;
 GameEngineClass.prototype.callbackIniciar = function() {
     if (GE.isGUI) {
         GE.nuevoGUI("InicioGUI");
+        //GE.nuevoNivel();
     } else {
         GE.nuevoNivel();
     }
@@ -133,7 +136,7 @@ GameEngineClass.prototype.init = function() {
     loadSprites("img/spriteSheetMap.json", GE.cargarNiveles);
 
     // ** Comentado mientras se corrigen errores en el gestor de sonidos
-    //loadSoundSheet("js/Sound/SoundSheetMap.json", function(){});
+    loadSoundSheet("js/Sound/SoundSheetMap.json", function() {});
 
     // Se inicializa el PhysicsEngine
     this.setup();
@@ -159,9 +162,6 @@ GameEngineClass.prototype.nivelPerdido = function() {
 GameEngineClass.prototype.nuevoNivel = function() {
     var nivelCargar = niveles[this.nivelActual];
 
-    //TODO: Validar que el nivel tenga definido un mapa
-    gMap.load(nivelCargar.mapa);
-
     //Limpiamos todo lo del nivel anterior
     for (var j = 0; j < this.entities.length; j++) {
         if (this.entities[j].physBody) gPhysicsEngine.removeBody(this.entities[j].physBody);
@@ -173,8 +173,22 @@ GameEngineClass.prototype.nuevoNivel = function() {
     this.cristalesActivos = 0;
     this.personaje = {};
 
+    if (nivelCargar.mapa) {
+        this.mapaActual = gMap.listaMapas[nivelCargar.mapa];
+    } else {
+        alert("Map not found for this level/stage !!!");
+        //VALIDAR: ¿generar fondo automaticamente?
+    }
+
+    //Instanciamos los objetos cargados por el mapa
+    for (var j = 0; j < this.mapaActual.objetos.length; j++) {
+        var objetoMapa = new GE.entidadesFactory[this.mapaActual.objetos[j].type](this.mapaActual.objetos[j]);
+        this.entities.push(objetoMapa);
+    }
+
     for (var i = 0; i < nivelCargar.entidades.length; i++) {
-        var entidadNueva = new this.entidadesFactory[nivelCargar.entidades[i].type](nivelCargar.entidades[i]);
+
+        var entidadNueva = new GE.entidadesFactory[nivelCargar.entidades[i].type](nivelCargar.entidades[i]);
         if (entidadNueva instanceof PilarClass) {
             this.pilaresActivos++;
         } else if (entidadNueva instanceof CristalClass) {
@@ -194,8 +208,13 @@ GameEngineClass.prototype.nuevoGUI = function(nombreGUI) {
 
     this.camara.noSeguir({ x: this.camara.size.h / 2, y: this.camara.size.y / 2 });
 
-    //TODO: Validar que el nivel tenga definido un mapa
-    gMap.load(nivelCargar.mapa);
+    if (nivelCargar.mapa) {
+        //TODO: Corregir, la lista de mapas llega vacia a este punto.
+        this.mapaActual = gMap.listaMapas[nivelCargar.mapa];
+    } else {
+        alert("Map not found for this level/stage !!!");
+        //VALIDAR: ¿generar fondo automaticamente?
+    }
 
     //Limpiamos todo lo del nivel anterior
     for (var j = 0; j < this.entities.length; j++) {
@@ -269,11 +288,20 @@ GameEngineClass.prototype.drawGame = function() {
     	}
     }*/
 
-    gMap.draw(GE.ctx);
+    //Limpiamos el canvas
+    this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h);
+
+    if (this.mapaActual) {
+        this.mapaActual.draw(GE.ctx);
+    }
 
     GE.entities.forEach(function(entidad) {
         entidad.draw();
     });
+
+    if (this.camara.debug) {
+        this.camara.drawDebugCamara();
+    }
 }
 
 GameEngineClass.prototype.spawnEnemy = function() {
@@ -288,6 +316,7 @@ GE.entidadesFactory["GuardianClass"] = GuardianClass;
 GE.entidadesFactory["PlayerClass"] = PlayerClass;
 GE.entidadesFactory["PilarClass"] = PilarClass;
 GE.entidadesFactory["CristalClass"] = CristalClass;
+GE.entidadesFactory["PisoClass"] = PisoClass;
 
 GE.init();
 
