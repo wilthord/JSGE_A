@@ -17,11 +17,11 @@ CamaraClass = function(camSize, target) {
 
     // Pixeles de libertad que se le permiten al objetivo sobre la camara, 
     // La camara solo se mueve si la diferencia entre las posiciones es mayor a este valor, para cada componente.
-    this.libertadObjetivo = { "x": 64, "y": 64 };
+    this.libertadObjetivo = { "x": 0, "y": 64 };
 
     //Limite de movimiento de la camara, permite indicar la maxima distancia en X y Y a la que se puede mover la camara
     //Actualmente no soporta valores inferiores a 0. 
-    this.limite = { "x": 2000, "y": 1100 };
+    this.limite = { "x": 320000, "y": 1100 };
 
     //Parametro que indica si se deben pintar los margenes de la camara
     this.debug = false;
@@ -101,7 +101,9 @@ CamaraClass.prototype.noSeguir = function(nuevaPos) {
     this.pos.x = nuevaPos.x;
     this.pos.y = nuevaPos.y;
 
-    this.update();
+    //Actualizamos el offset con la nueva posicion estatica
+    this.offset = { "x": 0, "y": 0 };
+    //this.update();
 
 }
 

@@ -4,7 +4,7 @@ MOV_IZQUIERDA = 'move-left';
 MOV_ABAJO = 'move-down';
 MOV_DERECHA = 'move-right';
 
-OCULTAR = 'OCULTAR';
+ACELERAR = 'ACELERAR';
 
 ACT_DISPARA = 'dispara';
 
@@ -35,8 +35,8 @@ InputEngineClass.prototype.setup = function () {
 	gInputEngine.bind(65, MOV_IZQUIERDA);
 	gInputEngine.bind(83, MOV_ABAJO);
 	gInputEngine.bind(68, MOV_DERECHA);
-	//Tecla E para ocultarse
-	gInputEngine.bind(69, OCULTAR);
+	//Barra espaciadora para acelerar
+	gInputEngine.bind(32, ACELERAR);
 	gInputEngine.bind(CLICK, CLICK);
 
 	// Se agregan los listeners para los eventos de ingreso

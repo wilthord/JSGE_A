@@ -100,9 +100,15 @@ MapClass.prototype.draw = function(ctx) {
 
             // Calculamos la posicion en el mundo, en la cual debemos pintar el tile
             var worldX = Math.floor(tileIDX % this.numTiles.x) * this.tileSize.x;
-            var worldY = Math.floor(tileIDX / this.numTiles.y) * this.tileSize.y;
+            var worldY = Math.floor(tileIDX / this.numTiles.x) * this.tileSize.y;
 
-            if (worldX - GE.camara.offset.x < -64 || worldX - GE.camara.offset.x > GE.canvasSize.w) {
+            if((GE.camara.offset.x%this.pixelSize.x)+GE.camara.size.w > this.pixelSize.x){
+                if(worldX<(GE.camara.offset.x%this.pixelSize.x)-64){
+                    worldX=worldX+(Math.floor((GE.camara.offset.x%this.pixelSize.x+GE.camara.size.w)/this.pixelSize.x)*this.pixelSize.x);
+                }
+            }
+
+            if (worldX - (GE.camara.offset.x%this.pixelSize.x) < -64 || worldX - (GE.camara.offset.x%this.pixelSize.x) > GE.canvasSize.w) {
                 continue;
             }
 
@@ -113,7 +119,7 @@ MapClass.prototype.draw = function(ctx) {
             //Pintamos el tile
             ctx.drawImage(tPKT.img, tPKT.px, tPKT.py,
                 this.tileSize.x, this.tileSize.y,
-                worldX - GE.camara.offset.x, worldY - GE.camara.offset.y,
+                worldX - (GE.camara.offset.x%this.pixelSize.x), worldY - GE.camara.offset.y,
                 this.tileSize.x, this.tileSize.y);
 
         }

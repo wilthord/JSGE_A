@@ -18,7 +18,7 @@ GUIActionsClass.prototype.disminuirNivel = function() {
 
 GUIActionsClass.prototype.iniciarNivel = function() {
     gInputEngine.actions[CLICK] = false;
-    gSM.playSound("jump", { loop: true, vol: 1 });
+    //gSM.playSound("jump", { loop: true, vol: 1 });
     GE.isGUI = false;
     GE.nuevoNivel();
 }
